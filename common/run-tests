@@ -200,7 +200,10 @@ function run_tests {
 
 		echo "Executing $TESTS_NAME test $TEST_NAME."
 		case "$TEST_TYPE" in
-			"args" | "args-fail") local TEST_CMD="$EXECUTABLE_PATH $(cat $TEST_PATH) < /dev/null" ;;
+			"args" | "args-fail")
+				local TEST_ARGS="$(sed -e "s:OUTPUT_FILE:$RUN_FILE:g" -e "s:TESTS_DIR:$TESTS_DIR:g" "$TEST_PATH")"
+				local TEST_CMD="$EXECUTABLE_PATH $TEST_ARGS < /dev/null"
+				;;
 			"input" | "input-no-vg") local TEST_CMD="$EXECUTABLE_PATH < $TEST_PATH" ;;
 			*)
 				FAILURE_TAG=error test_error 'Internal error' 'internal-error' "Unknown test type $TEST_TYPE."
@@ -214,8 +217,7 @@ function run_tests {
 		local RUN_TEST="$TEST_CMD > '$RUN_STDOUT' 2> '$RUN_STDERR'"
 		# Bash parses && before word expansion, can't store EVAL settings in variable.
 		log "About to run '$RUN_TEST'"
-		local RUN_STATUS="$(ulimit -v $((500 * 1024)) && ulimit -t 10 && eval $RUN_TEST)"
-		local RUN_EXIT_CODE=$?
+		local RUN_EXIT_CODE="$(ulimit -v $((500 * 1024)) && ulimit -t 10 && ulimit -f $((10 * 1024)) && eval $RUN_TEST ; echo $?)"
 		log RUN_EXIT_CODE="$RUN_EXIT_CODE"
 		# TODO: should we filter stdout for prompts? IDK.
 
@@ -237,26 +239,27 @@ function run_tests {
 
 		if [[ -v REPORT ]] ; then
 			report -n "<system-out>"
-			cat "$RUN_STDOUT" >> "$REPORT_PATH"
+			sed '1000{s/.*/=== TRUNCATED: too many lines ===/;q;}' "$RUN_STDOUT"  >> "$REPORT_PATH"
 			report "</system-out>"
 			report -n "<system-err>"
-			cat "$RUN_STDERR" >> "$REPORT_PATH"
+			sed '1000{s/.*/=== TRUNCATED: too many lines ===/;q;}' "$RUN_STDERR" >> "$REPORT_PATH"
 			report "</system-err>"
 		fi
 
 		report "</testcase>"
 		
 		if [[ $TEST_TYPE != *-no-vg ]] ; then
+			echo "  Executing with valgrind now..."
+
 			report "<testcase name=\"$TEST_NAME (run with Valgrind)\">"
 			
 			local RUN_STDOUT="$RUN_OUTPUT_DIR/$TEST_NAME.vg-stdout.log"
 			local RUN_STDERR="$RUN_OUTPUT_DIR/$TEST_NAME.vg-stderr.log"
 			local RUN_FILE="$RUN_OUTPUT_DIR/$TEST_NAME.vg-output.bin" 
 
-			local RUN_TEST="valgrind $TEST_CMD > '$RUN_STDOUT' 2> '$RUN_STDERR'"
+			local RUN_TEST="valgrind --leak-check=full --error-exitcode=123 -- $TEST_CMD > '$RUN_STDOUT' 2> '$RUN_STDERR'"
 			log "About to run '$RUN_TEST'"
-			local RUN_STATUS="$(ulimit -v $((500 * 1024)) && ulimit -t 10 && eval $RUN_TEST)"
-			local RUN_EXIT_CODE=$?
+			local RUN_EXIT_CODE="$(ulimit -v $((500 * 1024)) && ulimit -t $((10 * 1024)) && ulimit -f 50 && eval $RUN_TEST ; echo $?)"
 			log RUN_EXIT_CODE="$RUN_EXIT_CODE"
 
 			if [[ $TEST_TYPE != 'args-fail' ]] ; then
@@ -270,6 +273,15 @@ function run_tests {
 				if [[ -f "$OUTPUT_FILE" ]] ; then
 					test_error "Output file" 'output-file' "Output file must not be created."
 				fi
+			fi
+
+			if [[ -v REPORT ]] ; then
+				report -n "<system-out>"
+				sed '1000{s/.*/=== TRUNCATED: too many lines ===/;q;}' "$RUN_STDOUT"  >> "$REPORT_PATH"
+				report "</system-out>"
+				report -n "<system-err>"
+				sed '1000{s/.*/=== TRUNCATED: too many lines ===/;q;}' "$RUN_STDERR" >> "$REPORT_PATH"
+				report "</system-err>"
 			fi
 
 			report "</testcase>"
