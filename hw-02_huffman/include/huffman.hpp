@@ -1,8 +1,36 @@
-//
-// Created by alex on 16.04.2022.
-//
+#pragma once
+#include<iostream>
+#include <vector>
+#include <map>
+#include "tree.hpp"
 
-#ifndef HW_02_HUFFMAN_HUFFMAN_HPP
-#define HW_02_HUFFMAN_HUFFMAN_HPP
+namespace Encode {
+    class Encode {
+    public:
+        std::vector<char> symbols;
+        std::map<char, int> stat_symbols;
+        Trees::Tree* local_tree;
 
-#endif //HW_02_HUFFMAN_HUFFMAN_HPP
+        void build();
+
+        friend std::istream& operator>>(std::istream &stream, Encode &encoder);
+
+        friend std::ostream& operator<<(std::ostream &stream, const Encode &encoder);
+
+        ~Encode();
+    };
+}
+
+namespace Decode {
+    class Decode {
+    public:
+        Trees::Tree* local_tree = new Trees::Tree();
+        std::vector<char> symbols;
+
+        friend std::istream& operator>>(std::istream &stream, Decode &decoder);
+
+        friend std::ostream& operator<<(std::ostream &stream, const Decode &decoder);
+
+        ~Decode();
+    };
+}

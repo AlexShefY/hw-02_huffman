@@ -1,4 +1,4 @@
-//
-// Created by alex on 16.04.2022.
-//
+#include "exceptions.hpp"
 
+Exceptions::MyException::MyException(std::string message) : message(message) {
+}
