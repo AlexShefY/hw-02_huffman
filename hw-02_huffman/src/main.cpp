@@ -29,12 +29,18 @@ int main(int argc, char* argv[]) {
         encoder.local_tree->get_map(mp);
         std::ofstream file_out(argv[5]);
         file_out << encoder;
+        std::cout << encoder.file_size << "\n";
+        std::cout << encoder.code_size << "\n";
+        std::cout << encoder.tree_size << "\n";
     } else {
         Decode::Decode decoder;
         std::ifstream file_in(argv[3]);
         file_in >> decoder;
         std::ofstream file_out(argv[5]);
         file_out << decoder;
+        std::cout << decoder.code_size << "\n";
+        std::cout << decoder.file_size << "\n";
+        std::cout << decoder.tree_size << "\n";
     }
     return 0;
 }

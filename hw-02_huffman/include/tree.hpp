@@ -24,11 +24,12 @@ namespace Trees {
         Node* cur;
 
     public:
+        int byte_size;
         void get_map(std::map<char, std::vector<bool>> &mp) const;
         void build(std::map<char, std::vector<bool>> &mp);
         Tree(std::map<char, int> symbols_stat);
         Tree();
-        friend std::ostream& operator<<(std::ostream& stream, const Tree& tree);
+        friend std::ostream& operator<<(std::ostream& stream, Tree& tree);
         friend std::istream& operator>>(std::istream& stream, Tree& tree);
         char move(int bit);
 

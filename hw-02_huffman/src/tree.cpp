@@ -92,15 +92,18 @@ namespace Trees {
         }
     }
 
-    std::ostream& operator<<(std::ostream& stream,const Tree& tree) {
+    std::ostream& operator<<(std::ostream& stream, Tree& tree) {
         std::map<char, std::vector<bool>> mp;
         tree.get_map(mp);
         int sz = mp.size();
         stream.write(reinterpret_cast <const char*>(&sz), sizeof(sz));
+        tree.byte_size += sizeof(sz);
         for (auto item : mp) {
             stream.write(reinterpret_cast<const char*> (&item.first), sizeof(item.first));
+            tree.byte_size += sizeof(item.first);
             uint8_t sz1 =item.second.size();
             stream.write(reinterpret_cast<const char*> (&sz1), sizeof(sz1));
+            tree.byte_size += sizeof(sz1);
             while (item.second.size() % 8 != 0) {
                 item.second.push_back(0);
             }
@@ -109,6 +112,7 @@ namespace Trees {
                 for (size_t j = 0; j < 8; j++) {
                     a = a * 2 + int8_t(item.second[j]);
                 }
+                tree.byte_size += sizeof(a);
                 stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
             }
         }
@@ -126,16 +130,20 @@ namespace Trees {
     std::istream& operator>>(std::istream& stream, Tree& tree) {
         int sz;
         stream.read(reinterpret_cast<char*>(&sz), sizeof(sz));
+        tree.byte_size += sizeof(sz);
         std::map<char, std::vector<bool>> mp;
         for (int i = 0; i < sz; i++) {
             char c = 0;
             stream.read(reinterpret_cast<char *>(&c), sizeof(c));
+            tree.byte_size += sizeof(c);
             uint8_t sz1 = 0;
             stream.read(reinterpret_cast<char *>(&sz1), sizeof(sz1));
+            tree.byte_size += sizeof(sz1);
             std::vector <bool> code;
             for (int j = 0; j < (sz1 + 7) / 8; j++) {
                 uint8_t a = 0;
                 stream.read(reinterpret_cast<char *>(&a), sizeof(a));
+                tree.byte_size += sizeof(a);
                 std::vector <bool> vec;
                 int val = static_cast<int>(a);
                 for (size_t k = 0; k < 8; k++) {
