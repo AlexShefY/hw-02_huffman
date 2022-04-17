@@ -24,7 +24,7 @@ namespace Trees {
         Node* cur;
 
     public:
-        int byte_size;
+        int byte_size = 0;
         void get_map(std::map<char, std::vector<bool>> &mp) const;
         void build(std::map<char, std::vector<bool>> &mp);
         Tree(std::map<char, int> symbols_stat);
