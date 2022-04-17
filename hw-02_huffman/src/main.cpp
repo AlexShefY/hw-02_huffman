@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
+#include <fstream>
 #include "exceptions.hpp"
+#include "huffman.hpp"
 
 int main(int argc, char* argv[]) {
     if (argc < 5) {
@@ -19,15 +21,20 @@ int main(int argc, char* argv[]) {
         std::cout << ("wrong flag " + std::string(argv[4]));
         exit(1);
     }
-    try {
-        if (strcmp(argv[1], "-c") == 0) {
-
-        } else {
-
-        }
-    }
-    catch (Exceptions::MyException& e) {
-        std::cout << e.message;
+    if (strcmp(argv[1], "-c") == 0) {
+        Encode::Encode encoder;
+        std::ifstream file_in(argv[3]);
+        file_in >> encoder;
+        std::map<char, std::vector<bool>> mp;
+        encoder.local_tree->get_map(mp);
+        std::ofstream file_out(argv[5]);
+        file_out << encoder;
+    } else {
+        Decode::Decode decoder;
+        std::ifstream file_in(argv[3]);
+        file_in >> decoder;
+        std::ofstream file_out(argv[5]);
+        file_out << decoder;
     }
     return 0;
 }
