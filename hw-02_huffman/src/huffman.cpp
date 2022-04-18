@@ -37,7 +37,7 @@ namespace Encode {
             bytes.push_back(0);
         }
         stream.write(reinterpret_cast<const char *>(&sz), sizeof(sz));
-        encoder.code_size += sizeof(sz);
+        encoder.tree_size += sizeof(sz);
         for (size_t i = 0; i < bytes.size(); i += 8) {
             uint8_t a = 0;
             for (int j = 0; j < 8; j++) {
@@ -68,7 +68,7 @@ namespace Decode {
         decoder.tree_size = decoder.local_tree->byte_size;
         int size;
         stream.read(reinterpret_cast<char *>(&size), sizeof(size));
-        decoder.code_size += sizeof(size);
+        decoder.tree_size += sizeof(size);
         uint8_t byte;
         while (stream.read(reinterpret_cast<char *>(&byte), sizeof(byte))) {
             decoder.code_size += sizeof(byte);
