@@ -40,10 +40,18 @@ namespace Trees {
 
     Tree::Tree(std::map<char, int> mp) {
         Statistics::Statistics stat = Statistics::Statistics(mp);
+        if (stat.one_elem()) {
+            Node* node1 = stat.extract();
+            Node* node0 = new Node(-1, node1->count);
+            node0->left = node1;
+            root = node0;
+            cur = root;
+            return;
+        }
         while (!stat.one_elem()) {
             Node *node1 = stat.extract();
             Node *node2 = stat.extract();
-            Trees::Node *node0 = new Node(-1, node1->count + node2->count);
+            Node *node0 = new Node(-1, node1->count + node2->count);
             node0->left = node1;
             node0->right = node2;
             stat.add(node0);
