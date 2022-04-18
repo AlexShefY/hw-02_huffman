@@ -119,7 +119,7 @@ namespace Trees {
             for (size_t i = 0; i < item.second.size(); i += 8) {
                 uint8_t a = 0;
                 for (size_t j = 0; j < 8; j++) {
-                    a = a * 2 + int8_t(item.second[j]);
+                    a = a * 2 + item.second[j + i];
                 }
                 tree.byte_size += sizeof(a);
                 stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
