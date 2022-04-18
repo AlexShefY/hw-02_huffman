@@ -1,4 +1,5 @@
 
+#include <cassert>
 #include "huffman.hpp"
 #include "tree.hpp"
 
@@ -87,6 +88,7 @@ namespace Decode {
                 }
                 size--;
                 i++;
+                assert(cur != -1 || size != 0);
             }
         }
         return stream;
