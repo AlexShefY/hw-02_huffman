@@ -116,7 +116,7 @@ namespace Trees {
         for (auto item : mp) {
             stream.write(reinterpret_cast<const char*> (&item.first), sizeof(item.first));
             tree.byte_size += sizeof(item.first);
-            uint8_t sz1 =item.second.size();
+            int sz1 = item.second.size();
             stream.write(reinterpret_cast<const char*> (&sz1), sizeof(sz1));
             tree.byte_size += sizeof(sz1);
             while (item.second.size() % 8 != 0) {
@@ -154,7 +154,7 @@ namespace Trees {
             char c = 0;
             stream.read(reinterpret_cast<char *>(&c), sizeof(c));
             tree.byte_size += sizeof(c);
-            uint8_t sz1 = 0;
+            int sz1 = 0;
             stream.read(reinterpret_cast<char *>(&sz1), sizeof(sz1));
             tree.byte_size += sizeof(sz1);
             std::vector <bool> code;
