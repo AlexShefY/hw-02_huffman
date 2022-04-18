@@ -40,6 +40,9 @@ namespace Trees {
     }
 
     Tree::Tree(std::map<char, int> mp) {
+        if (mp.size() == 0) {
+            return;
+        }
         Statistics::Statistics stat = Statistics::Statistics(mp);
         if (stat.one_elem()) {
             Node* node1 = stat.extract();
