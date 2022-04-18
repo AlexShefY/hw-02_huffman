@@ -81,6 +81,9 @@ namespace Trees {
     }
 
     void Tree::get_map(std::map<char, std::vector<bool>> &mp) const {
+        if (root == nullptr) {
+            return;
+        }
         std::vector<bool> vec;
         root->get_map(mp, vec);
     }
@@ -132,6 +135,9 @@ namespace Trees {
     }
 
     void Tree::build(std::map<char, std::vector<bool>> &mp) {
+        if (mp.size() == 0) {
+            return;
+        }
         root = new Node(-1, 0);
         cur = root;
         for (auto p : mp) {
@@ -173,7 +179,6 @@ namespace Trees {
             assert(sz1 == 0);
             mp[c] = code;
         }
-        tree.root = nullptr;
         tree.build(mp);
         return stream;
     }

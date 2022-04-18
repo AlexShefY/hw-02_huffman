@@ -20,8 +20,8 @@ namespace Trees {
     };
 
     class Tree {
-        Node* root;
-        Node* cur;
+        Node* root = nullptr;
+        Node* cur = nullptr;
 
     public:
         int byte_size = 0;
