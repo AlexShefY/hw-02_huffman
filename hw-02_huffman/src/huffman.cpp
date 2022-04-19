@@ -89,7 +89,6 @@ namespace Decode {
                 }
                 size--;
                 i++;
-                assert(cur != -1 || size != 0);
             }
         }
         return stream;
