@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "tree.hpp"
+#include "statistics.hpp"
 
 namespace Statistics {
     Statistics::Statistics(const std::map<char, int> &mp) {
