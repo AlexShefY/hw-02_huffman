@@ -24,15 +24,17 @@ namespace Trees {
         delete root;
     }
 
-    char Tree::move(int bit) {
+    char Tree::move(int bit, bool &flag) {
         if (bit == 0) {
             cur = cur->left;
         } else {
             cur = cur->right;
         }
         if (cur->left != nullptr) {
+            flag = false;
             return -1;
         } else {
+            flag = true;
             char ans = cur->symbol;
             cur = root;
             return ans;

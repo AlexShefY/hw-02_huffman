@@ -82,8 +82,9 @@ namespace Decode {
             reverse(vec.begin(), vec.end());
             size_t i = 0;
             while (size > 0 && i < vec.size()) {
-                char cur = decoder.local_tree->move(vec[i]);
-                if (cur != -1) {
+                bool flag = false;
+                char cur = decoder.local_tree->move(vec[i], flag);
+                if (flag) {
                     decoder.symbols.push_back(cur);
                 }
                 size--;

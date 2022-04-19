@@ -31,7 +31,7 @@ namespace Trees {
         Tree();
         friend std::ostream& operator<<(std::ostream& stream, Tree& tree);
         friend std::istream& operator>>(std::istream& stream, Tree& tree);
-        char move(int bit);
+        char move(int bit, bool &flag);
 
         ~Tree();
     };
