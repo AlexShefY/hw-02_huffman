@@ -1,13 +1,20 @@
+#include "exceptions.hpp"
 #include "help_functions.hpp"
 
 std::vector <bool> read_bytes(std::istream &stream, size_t &calc_size) {
     int size;
     stream.read(reinterpret_cast<char *>(&size), sizeof(size));
+    if (stream.fail()) {
+        throw Exceptions::MyException("Logical error on i/o operation");
+    }
     uint8_t byte;
     int iter = (size + 7) / 8;
     std::vector <bool> ans;
     for (int j = 0; j < iter; j++) {
         stream.read(reinterpret_cast<char *>(&byte), sizeof(byte));
+        if (stream.fail()) {
+            throw Exceptions::MyException("Logical error on i/o operation");
+        }
         calc_size += sizeof(byte);
         std::vector <int> vec(8);
         int val = static_cast<int>(byte);
@@ -32,12 +39,18 @@ void write_bytes(std::ostream &stream, std::vector<bool> bytes, size_t &calc_siz
         bytes.push_back(0);
     }
     stream.write(reinterpret_cast<const char *>(&sz), sizeof(sz));
+    if (stream.fail()) {
+        throw Exceptions::MyException("can not write bytes");
+    }
     for (size_t i = 0; i < bytes.size(); i += 8) {
         uint8_t a = 0;
         for (int j = 0; j < 8; j++) {
             a = a * 2 + bytes[i + j];
         }
         stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
+        if (stream.fail()) {
+            throw Exceptions::MyException("can not write bytes");
+        }
         calc_size += sizeof(a);
     }
 }
@@ -46,9 +59,15 @@ std::vector<char> read_text(std::istream &stream) {
     std::vector<char> text;
     char t;
     stream.read(&t, sizeof(char));
+    if (stream.fail() && !stream.eof()) {
+        throw Exceptions::MyException("Logical error on i/o operation");
+    }
     while (!stream.eof()) {
         text.push_back(t);
         stream.read(&t, sizeof(char));
+        if (stream.fail() && !stream.eof()) {
+            throw Exceptions::MyException("Logical error on i/o operation");
+        }
     }
     return text;
 }
@@ -56,6 +75,9 @@ std::vector<char> read_text(std::istream &stream) {
 void write_text(std::ostream &stream, std::vector<char> text) {
     for (auto c : text) {
         stream.write(reinterpret_cast<const char *>(&c), sizeof(c));
+        if (stream.fail()) {
+            throw Exceptions::MyException("can not write chars");
+        }
     }
 }
 
