@@ -31,20 +31,8 @@ namespace Encode {
                 bytes.push_back(e);
             }
         }
-        int sz = bytes.size();
-        while (bytes.size() % 8 != 0) {
-            bytes.push_back(0);
-        }
-        stream.write(reinterpret_cast<const char *>(&sz), sizeof(sz));
-        encoder.tree_size += sizeof(sz);
-        for (size_t i = 0; i < bytes.size(); i += 8) {
-            uint8_t a = 0;
-            for (int j = 0; j < 8; j++) {
-                a = a * 2 + bytes[i + j];
-            }
-            stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
-            encoder.code_size += sizeof(a);
-        }
+        write_bytes(stream, bytes, encoder.code_size);
+        encoder.tree_size += sizeof(int);
         return stream;
     }
 

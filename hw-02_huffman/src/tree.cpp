@@ -118,20 +118,8 @@ namespace Trees {
         for (auto item : mp) {
             stream.write(reinterpret_cast<const char*> (&item.first), sizeof(item.first));
             tree.byte_size += sizeof(item.first);
-            int sz1 = item.second.size();
-            stream.write(reinterpret_cast<const char*> (&sz1), sizeof(sz1));
-            tree.byte_size += sizeof(sz1);
-            while (item.second.size() % 8 != 0) {
-                item.second.push_back(0);
-            }
-            for (size_t i = 0; i < item.second.size(); i += 8) {
-                uint8_t a = 0;
-                for (size_t j = 0; j < 8; j++) {
-                    a = a * 2 + item.second[j + i];
-                }
-                tree.byte_size += sizeof(a);
-                stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
-            }
+            tree.byte_size += sizeof(int);
+            write_bytes(stream, item.second, tree.byte_size);
         }
         return stream;
     }

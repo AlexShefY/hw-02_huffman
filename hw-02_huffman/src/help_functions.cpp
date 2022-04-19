@@ -1,7 +1,6 @@
 #include "help_functions.hpp"
 
-
-std::vector <bool> read_bytes(std::istream& stream, size_t &calc_size) {
+std::vector <bool> read_bytes(std::istream &stream, size_t &calc_size) {
     int size;
     stream.read(reinterpret_cast<char *>(&size), sizeof(size));
     uint8_t byte;
@@ -25,4 +24,21 @@ std::vector <bool> read_bytes(std::istream& stream, size_t &calc_size) {
         }
     }
     return ans;
+}
+
+void write_bytes(std::ostream &stream, std::vector<bool> &bytes, size_t &calc_size) {
+    int sz = bytes.size();
+    while (bytes.size() % 8 != 0) {
+        bytes.push_back(0);
+    }
+    stream.write(reinterpret_cast<const char *>(&sz), sizeof(sz));
+    calc_size += sizeof(sz);
+    for (size_t i = 0; i < bytes.size(); i += 8) {
+        uint8_t a = 0;
+        for (int j = 0; j < 8; j++) {
+            a = a * 2 + bytes[i + j];
+        }
+        stream.write(reinterpret_cast<const char *>(&a), sizeof(a));
+        calc_size += sizeof(a);
+    }
 }
