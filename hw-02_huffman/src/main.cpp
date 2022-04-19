@@ -25,8 +25,6 @@ int main(int argc, char* argv[]) {
         Encode::Encode encoder;
         std::ifstream file_in(argv[3]);
         file_in >> encoder;
-        std::map<char, std::vector<bool>> mp;
-        encoder.local_tree->get_map(mp);
         std::ofstream file_out(argv[5]);
         file_out << encoder;
         std::cout << encoder.file_size << "\n";

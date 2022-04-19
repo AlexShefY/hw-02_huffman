@@ -158,7 +158,8 @@ namespace Trees {
             stream.read(reinterpret_cast<char *>(&sz1), sizeof(sz1));
             tree.byte_size += sizeof(sz1);
             std::vector <bool> code;
-            for (int j = 0; j < (sz1 + 7) / 8; j++) {
+            int iter = (sz1 + 7) / 8;
+            for (int j = 0; j < iter; j++) {
                 uint8_t a = 0;
                 stream.read(reinterpret_cast<char *>(&a), sizeof(a));
                 tree.byte_size += sizeof(a);
