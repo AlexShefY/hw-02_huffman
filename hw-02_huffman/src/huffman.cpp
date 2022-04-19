@@ -36,12 +36,12 @@ namespace HuffmanArchiver {
         std::vector<bool> bytes;
         for (auto t : text) {
             for (auto e : mp[t]) {
-                try {
+             //   try {
                     bytes.push_back(e);
-                }
+               /* }
                 catch (std::bad_alloc& e) {
                     throw Exceptions::MyException(e.what());
-                }
+                }*/
             }
         }
         return bytes;
@@ -53,12 +53,12 @@ namespace HuffmanArchiver {
             bool flag = false;
             char cur = local_tree->move(byte, flag);
             if (flag) {
-                try {
+              //  try {
                     ans.push_back(cur);
-                }
+                /*}
                 catch (std::bad_alloc& e) {
                     throw Exceptions::MyException(e.what());
-                }
+                }*/
             }
         }
         return ans;
