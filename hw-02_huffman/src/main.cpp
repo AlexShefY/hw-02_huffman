@@ -34,16 +34,6 @@ int main(int argc, char* argv[]) {
         std::cout << sizeof(char) * text.size() << "\n";
         std::cout << size_bytes << "\n";
         std::cout << archiver.tree_size << "\n";
-        /*
-        Encode::Encode encoder;
-        std::ifstream file_in(argv[3]);
-        file_in >> encoder;
-        encoder.build();
-        std::ofstream file_out(argv[5]);
-        file_out << encoder;
-        std::cout << encoder.file_size << "\n";
-        std::cout << encoder.code_size << "\n";
-        std::cout << encoder.tree_size << "\n";*/
     } else {
         std::ifstream file_in(argv[3]);
         HuffmanArchiver::HuffmanArchiver archiver;
@@ -56,15 +46,6 @@ int main(int argc, char* argv[]) {
         std::cout << size_bytes << "\n";
         std::cout << sizeof(char) * text.size() << "\n";
         std::cout << archiver.tree_size << "\n";
-        /*
-        Decode::Decode decoder;
-        std::ifstream file_in(argv[3]);
-        file_in >> decoder;
-        std::ofstream file_out(argv[5]);
-        file_out << decoder;
-        std::cout << decoder.code_size << "\n";
-        std::cout << decoder.file_size << "\n";
-        std::cout << decoder.tree_size << "\n";*/
     }
     return 0;
 }
