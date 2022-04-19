@@ -1,6 +1,7 @@
 
 #include<iostream>
 #include "tree.hpp"
+#include "help_functions.hpp"
 
 namespace Trees {
 
@@ -149,36 +150,14 @@ namespace Trees {
     std::istream& operator>>(std::istream& stream, Tree& tree) {
         int sz;
         stream.read(reinterpret_cast<char*>(&sz), sizeof(sz));
-        tree.byte_size += sizeof(sz);
+        tree.byte_size += sizeof(int);
         std::map<char, std::vector<bool>> mp;
         for (int i = 0; i < sz; i++) {
             char c = 0;
             stream.read(reinterpret_cast<char *>(&c), sizeof(c));
             tree.byte_size += sizeof(c);
-            int sz1 = 0;
-            stream.read(reinterpret_cast<char *>(&sz1), sizeof(sz1));
-            tree.byte_size += sizeof(sz1);
-            std::vector <bool> code;
-            int iter = (sz1 + 7) / 8;
-            for (int j = 0; j < iter; j++) {
-                uint8_t a = 0;
-                stream.read(reinterpret_cast<char *>(&a), sizeof(a));
-                tree.byte_size += sizeof(a);
-                std::vector <bool> vec;
-                int val = static_cast<int>(a);
-                for (size_t k = 0; k < 8; k++) {
-                    vec.push_back(static_cast<bool>(val % 2));
-                    val /= 2;
-                }
-                reverse(vec.begin(), vec.end());
-                size_t k = 0;
-                while (sz1 > 0 && k < vec.size()) {
-                    code.push_back(vec[k]);
-                    k++;
-                    sz1--;
-                }
-            }
-            mp[c] = code;
+            tree.byte_size += sizeof(int);
+            mp[c] = read_bytes(stream, tree.byte_size);
         }
         tree.build(mp);
         return stream;

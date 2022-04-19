@@ -1,5 +1,6 @@
 #include "huffman.hpp"
 #include "tree.hpp"
+#include "help_functions.hpp"
 
 namespace Encode {
     std::istream &operator>>(std::istream &stream, Encode &encoder) {
@@ -64,30 +65,13 @@ namespace Decode {
     std::istream& operator>>(std::istream& stream, Decode &decoder) {
         stream >> *decoder.local_tree;
         decoder.tree_size = decoder.local_tree->byte_size;
-        int size;
-        stream.read(reinterpret_cast<char *>(&size), sizeof(size));
-        decoder.tree_size += sizeof(size);
-        uint8_t byte;
-        int iter = (size + 7) / 8;
-        for (int j = 0; j < iter; j++) {
-            stream.read(reinterpret_cast<char *>(&byte), sizeof(byte));
-            decoder.code_size += sizeof(byte);
-            std::vector <int> vec(8);
-            int val = static_cast<int>(byte);
-            for (size_t i = 0; i < 8; i++) {
-                vec[i] = val % 2;
-                val /= 2;
-            }
-            reverse(vec.begin(), vec.end());
-            size_t i = 0;
-            while (size > 0 && i < vec.size()) {
-                bool flag = false;
-                char cur = decoder.local_tree->move(vec[i], flag);
-                if (flag) {
-                    decoder.symbols.push_back(cur);
-                }
-                size--;
-                i++;
+        decoder.tree_size += sizeof(int);
+        std::vector <bool> bytes = read_bytes(stream, decoder.code_size);
+        for (auto byte : bytes) {
+            bool flag = false;
+            char cur = decoder.local_tree->move(byte, flag);
+            if (flag) {
+                decoder.symbols.push_back(cur);
             }
         }
         return stream;
