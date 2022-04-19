@@ -1,19 +1,16 @@
-
-#include <cassert>
 #include "huffman.hpp"
 #include "tree.hpp"
 
 namespace Encode {
     std::istream &operator>>(std::istream &stream, Encode &encoder) {
-        char* t = new char;
-        stream.read(t, sizeof(char));
+        char t;
+        stream.read(&t, sizeof(char));
         while (!stream.eof()) {
             encoder.file_size += sizeof(char);
-            encoder.stat_symbols[*t]++;
-            encoder.symbols.push_back(*t);
-            stream.read(t, sizeof(char));
+            encoder.stat_symbols[t]++;
+            encoder.symbols.push_back(t);
+            stream.read(&t, sizeof(char));
         }
-        delete t;
         encoder.build();
         return stream;
     }
