@@ -1,6 +1,5 @@
 #include "huffman.hpp"
 #include "tree.hpp"
-#include "help_functions.hpp"
 
 namespace HuffmanArchiver {
 

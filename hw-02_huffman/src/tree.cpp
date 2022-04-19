@@ -3,6 +3,7 @@
 #include "tree.hpp"
 #include "help_functions.hpp"
 #include "statistics.hpp"
+#include "exceptions.hpp"
 
 namespace Trees {
 
@@ -111,9 +112,15 @@ namespace Trees {
         tree.get_map(mp);
         int sz = mp.size();
         stream.write(reinterpret_cast <const char*>(&sz), sizeof(sz));
+        if (stream.fail()) {
+            throw Exceptions::MyException("fail to write tree");
+        }
         tree.byte_size += sizeof(sz);
         for (auto item : mp) {
             stream.write(reinterpret_cast<const char*> (&item.first), sizeof(item.first));
+            if (stream.fail()) {
+                throw Exceptions::MyException("fail to write tree");
+            }
             tree.byte_size += sizeof(item.first);
             tree.byte_size += sizeof(int);
             write_bytes(stream, item.second, tree.byte_size);
@@ -135,11 +142,17 @@ namespace Trees {
     std::istream& operator>>(std::istream& stream, Tree& tree) {
         int sz;
         stream.read(reinterpret_cast<char*>(&sz), sizeof(sz));
+        if (stream.fail()) {
+            throw Exceptions::MyException("fail to read tree");
+        }
         tree.byte_size += sizeof(int);
         std::map<char, std::vector<bool>> mp;
         for (int i = 0; i < sz; i++) {
             char c = 0;
             stream.read(reinterpret_cast<char *>(&c), sizeof(c));
+            if (stream.fail()) {
+                throw Exceptions::MyException("fail to read tree");
+            }
             tree.byte_size += sizeof(c);
             tree.byte_size += sizeof(int);
             mp[c] = read_bytes(stream, tree.byte_size);
