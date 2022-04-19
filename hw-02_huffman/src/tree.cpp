@@ -1,6 +1,5 @@
 
 #include<iostream>
-#include <cassert>
 #include "tree.hpp"
 
 namespace Trees {
@@ -179,7 +178,6 @@ namespace Trees {
                     sz1--;
                 }
             }
-            assert(sz1 == 0);
             mp[c] = code;
         }
         tree.build(mp);

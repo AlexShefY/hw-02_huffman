@@ -68,7 +68,9 @@ namespace Decode {
         stream.read(reinterpret_cast<char *>(&size), sizeof(size));
         decoder.tree_size += sizeof(size);
         uint8_t byte;
-        while (stream.read(reinterpret_cast<char *>(&byte), sizeof(byte))) {
+        int iter = (size + 7) / 8;
+        for (int j = 0; j < iter; j++) {
+            stream.read(reinterpret_cast<char *>(&byte), sizeof(byte));
             decoder.code_size += sizeof(byte);
             std::vector <int> vec(8);
             int val = static_cast<int>(byte);
