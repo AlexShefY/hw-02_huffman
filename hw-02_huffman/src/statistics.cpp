@@ -3,7 +3,7 @@
 #include "tree.hpp"
 
 namespace Statistics {
-    Statistics::Statistics(std::map<char, int> mp) {
+    Statistics::Statistics(const std::map<char, int> &mp) {
         for (auto p: mp) {
             auto *node = new Trees::Node(p.first, p.second);
             counter.push({-node->count, node});

@@ -41,3 +41,28 @@ void write_bytes(std::ostream &stream, std::vector<bool> bytes, size_t &calc_siz
         calc_size += sizeof(a);
     }
 }
+
+std::vector<char> read_text(std::istream &stream) {
+    std::vector<char> text;
+    char t;
+    stream.read(&t, sizeof(char));
+    while (!stream.eof()) {
+        text.push_back(t);
+        stream.read(&t, sizeof(char));
+    }
+    return text;
+}
+
+void write_text(std::ostream &stream, std::vector<char> text) {
+    for (auto c : text) {
+        stream.write(reinterpret_cast<const char *>(&c), sizeof(c));
+    }
+}
+
+std::map<char, int> map_from_text(std::vector<char> text) {
+    std::map<char, int> mp;
+    for (auto c : text) {
+        mp[c]++;
+    }
+    return mp;
+}

@@ -37,7 +37,7 @@ namespace Trees {
         }
     }
 
-    Tree::Tree(std::map<char, int> mp) {
+    Tree::Tree(const std::map<char, int> &mp) {
         if (mp.size() == 0) {
             return;
         }

@@ -26,7 +26,7 @@ namespace Trees {
         size_t byte_size = 0;
         void get_map(std::map<char, std::vector<bool>> &mp) const;
         void build(std::map<char, std::vector<bool>> &mp);
-        Tree(std::map<char, int> symbols_stat);
+        Tree(const std::map<char, int> &symbols_stat);
         Tree();
         friend std::ostream& operator<<(std::ostream& stream, Tree& tree);
         friend std::istream& operator>>(std::istream& stream, Tree& tree);
@@ -41,7 +41,7 @@ namespace Statistics {
         std::priority_queue<std::pair<int, Trees::Node*>> counter;
 
     public:
-        Statistics(std::map <char, int> mp);
+        Statistics(const std::map <char, int> &mp);
 
         bool one_elem();
 
