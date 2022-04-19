@@ -12,7 +12,6 @@ namespace Trees {
         int count;
 
         Node(char symbol, int count);
-        int operator<(const Node& other) const;
         ~Node();
 
         void add_nodes(char c, const std::vector<bool>& vec, size_t i);

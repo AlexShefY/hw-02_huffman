@@ -16,10 +16,6 @@ namespace Trees {
         delete right;
     }
 
-    int Node::operator<(const Node &other) const {
-        return -(count - other.count);
-    }
-
     Tree::~Tree() {
         delete root;
     }
