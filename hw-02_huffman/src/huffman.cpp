@@ -1,5 +1,6 @@
 #include "huffman.hpp"
 #include "tree.hpp"
+#include "exceptions.hpp"
 
 namespace HuffmanArchiver {
 
@@ -35,7 +36,12 @@ namespace HuffmanArchiver {
         std::vector<bool> bytes;
         for (auto t : text) {
             for (auto e : mp[t]) {
-                bytes.push_back(e);
+                try {
+                    bytes.push_back(e);
+                }
+                catch (std::bad_alloc& e) {
+                    throw Exceptions::MyException(e.what());
+                }
             }
         }
         return bytes;
@@ -47,7 +53,12 @@ namespace HuffmanArchiver {
             bool flag = false;
             char cur = local_tree->move(byte, flag);
             if (flag) {
-                ans.push_back(cur);
+                try {
+                    ans.push_back(cur);
+                }
+                catch (std::bad_alloc& e) {
+                    throw Exceptions::MyException(e.what());
+                }
             }
         }
         return ans;

@@ -25,7 +25,12 @@ std::vector <bool> read_bytes(std::istream &stream, size_t &calc_size) {
         reverse(vec.begin(), vec.end());
         size_t i = 0;
         while (size > 0 && i < vec.size()) {
-            ans.push_back(vec[i]);
+            try {
+                ans.push_back(vec[i]);
+            }
+            catch (std::bad_alloc& e) {
+                throw Exceptions::MyException(e.what());
+            }
             size--;
             i++;
         }
@@ -63,7 +68,12 @@ std::vector<char> read_text(std::istream &stream) {
         throw Exceptions::MyException("Failed to read text");
     }
     while (!stream.eof()) {
-        text.push_back(t);
+        try {
+            text.push_back(t);
+        }
+        catch (std::bad_alloc& e) {
+            throw Exceptions::MyException(e.what());
+        }
         stream.read(&t, sizeof(char));
         if (stream.fail() && !stream.eof()) {
             throw Exceptions::MyException("Failed to read text");

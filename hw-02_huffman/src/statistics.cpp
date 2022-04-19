@@ -1,5 +1,3 @@
-
-#include <iostream>
 #include "statistics.hpp"
 
 namespace Statistics {

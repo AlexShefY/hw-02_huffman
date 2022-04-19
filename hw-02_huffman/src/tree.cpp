@@ -1,5 +1,3 @@
-
-#include<iostream>
 #include "tree.hpp"
 #include "help_functions.hpp"
 #include "statistics.hpp"
