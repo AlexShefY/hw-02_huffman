@@ -5,6 +5,7 @@
 namespace HuffmanArchiver {
 
     std::istream &operator>>(std::istream &stream, HuffmanArchiver &archiver) {
+        archiver.local_tree = new Trees::Tree();
         stream >> *archiver.local_tree;
         archiver.tree_size = archiver.local_tree->byte_size;
         archiver.tree_size += sizeof(int);

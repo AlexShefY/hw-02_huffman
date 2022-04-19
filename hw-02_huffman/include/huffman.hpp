@@ -6,7 +6,7 @@
 
 namespace HuffmanArchiver {
     class HuffmanArchiver {
-        Trees::Tree* local_tree = new Trees::Tree();
+        Trees::Tree* local_tree;
     public:
         size_t tree_size = 0;
 
