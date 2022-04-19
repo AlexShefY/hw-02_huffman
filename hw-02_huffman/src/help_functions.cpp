@@ -32,7 +32,6 @@ void write_bytes(std::ostream &stream, std::vector<bool> &bytes, size_t &calc_si
         bytes.push_back(0);
     }
     stream.write(reinterpret_cast<const char *>(&sz), sizeof(sz));
-    calc_size += sizeof(sz);
     for (size_t i = 0; i < bytes.size(); i += 8) {
         uint8_t a = 0;
         for (int j = 0; j < 8; j++) {

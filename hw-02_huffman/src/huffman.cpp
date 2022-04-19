@@ -12,7 +12,6 @@ namespace Encode {
             encoder.symbols.push_back(t);
             stream.read(&t, sizeof(char));
         }
-        encoder.build();
         return stream;
     }
 
