@@ -26,7 +26,7 @@ namespace HuffmanArchiver {
 
     HuffmanArchiver::HuffmanArchiver(std::string file) {
         std::ifstream stream(file);
-        std::map<char, int> stat_symbols = map_from_text(stream, text_size);
+        std::map<char, int> stat_symbols = help_functions::map_from_text(stream, text_size);
         local_tree = new Trees::Tree(stat_symbols);
     }
 
@@ -42,6 +42,9 @@ namespace HuffmanArchiver {
         int_bytes = int_bytes * 2 + int8_t(byte);
         if (count_bytes == 8) {
             stream.write(reinterpret_cast<const char *>(&int_bytes), sizeof(int_bytes));
+            if (stream.fail()) {
+                throw Exceptions::MyException("Failed to write byte");
+            }
             int_bytes = 0;
             count_bytes = 0;
         }
@@ -68,6 +71,9 @@ namespace HuffmanArchiver {
             }
         }
         out.write(reinterpret_cast<const char *>(&size), sizeof(size));
+        if (out.fail()) {
+            throw Exceptions::MyException("Failed to write size");
+        }
     }
 
     void HuffmanArchiver::encode(std::string file_in, std::ostream& out) {
@@ -131,6 +137,9 @@ namespace HuffmanArchiver {
                 if (flag) {
                     text_size++;
                     out.write(reinterpret_cast<char*>(&cur), sizeof(cur));
+                    if (out.fail()) {
+                        throw Exceptions::MyException("Failed to write text");
+                    }
                 }
                 size--;
                 i++;

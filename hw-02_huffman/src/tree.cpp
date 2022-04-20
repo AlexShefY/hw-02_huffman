@@ -121,7 +121,7 @@ namespace Trees {
             }
             tree.byte_size += sizeof(item.first);
             tree.byte_size += sizeof(int);
-            write_bytes(stream, item.second, tree.byte_size);
+            help_functions::write_bytes(stream, item.second, tree.byte_size);
         }
         return stream;
     }
@@ -153,7 +153,7 @@ namespace Trees {
             }
             tree.byte_size += sizeof(c);
             tree.byte_size += sizeof(int);
-            mp[c] = read_bytes(stream, tree.byte_size);
+            mp[c] = help_functions::read_bytes(stream, tree.byte_size);
         }
         tree.build(mp);
         return stream;

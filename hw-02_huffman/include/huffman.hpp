@@ -6,7 +6,11 @@
 
 namespace HuffmanArchiver {
     class HuffmanArchiver {
+
         Trees::Tree* local_tree;
+
+        void process_byte(bool byte, std::ostream &stream);
+
     public:
         int tree_size = 0;
         int text_size = 0;
@@ -17,8 +21,6 @@ namespace HuffmanArchiver {
         HuffmanArchiver();
 
         ~HuffmanArchiver();
-
-        void process_byte(bool byte, std::ostream &stream);
 
         void write_size(std::string file_in, std::ostream& out);
 
