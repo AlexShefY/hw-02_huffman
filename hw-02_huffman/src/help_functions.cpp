@@ -91,10 +91,20 @@ void write_text(std::ostream &stream, std::vector<char> text) {
     }
 }
 
-std::map<char, int> map_from_text(std::vector<char> text) {
+std::map<char, int> map_from_text(std::istream &stream, int &size) {
     std::map<char, int> mp;
-    for (auto c : text) {
-        mp[c]++;
+    char t;
+    stream.read(&t, sizeof(char));
+    if (stream.fail() && !stream.eof()) {
+        throw Exceptions::MyException("Failed to read text");
+    }
+    while (!stream.eof()) {
+        mp[t]++;
+        size++;
+        stream.read(&t, sizeof(char));
+        if (stream.fail() && !stream.eof()) {
+            throw Exceptions::MyException("Failed to read text");
+        }
     }
     return mp;
 }

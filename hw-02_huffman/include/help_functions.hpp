@@ -11,4 +11,4 @@ std::vector<char> read_text(std::istream &stream);
 
 void write_text(std::ostream &stream, std::vector<char> text);
 
-std::map<char, int> map_from_text(std::vector<char> text);
+std::map<char, int> map_from_text(std::istream &stream, int &size);

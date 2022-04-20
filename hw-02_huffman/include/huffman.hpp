@@ -8,20 +8,26 @@ namespace HuffmanArchiver {
     class HuffmanArchiver {
         Trees::Tree* local_tree;
     public:
-        size_t tree_size = 0;
+        int tree_size = 0;
+        int text_size = 0;
+        int bytes_size = 0;
 
-        HuffmanArchiver(const std::map <char, int> &stat_symbols);
+        HuffmanArchiver(std::string file);
 
         HuffmanArchiver();
 
         ~HuffmanArchiver();
 
+        void process_byte(bool byte, std::ostream &stream);
+
+        void write_size(std::string file_in, std::ostream& out);
+
         friend std::istream& operator>>(std::istream &stream, HuffmanArchiver &archiver);
 
         friend std::ostream& operator<<(std::ostream &stream, HuffmanArchiver &archiver);
 
-        std::vector <bool> encode(std::vector <char> text);
+        void encode(std::string file_in, std::ostream& out);
 
-        std::vector <char> decode(std::vector <bool> bytes);
+        void decode(std::istream &in, std::string file_out);
     };
 }
