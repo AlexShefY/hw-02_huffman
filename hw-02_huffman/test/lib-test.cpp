@@ -19,7 +19,7 @@ namespace tests {
     }
 
     TEST_CASE("small file") {
-        std::string file_in_name = "../tests/sample1.txt";
+        std::string file_in_name = "../test/sample_text.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
         CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
@@ -31,7 +31,7 @@ namespace tests {
     }
 
     TEST_CASE("big file") {
-        std::string file_in_name = "../tests/sample_big.txt";
+        std::string file_in_name = "../test/sample_big.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
         CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
@@ -43,7 +43,7 @@ namespace tests {
     }
 
     TEST_CASE("empty file") {
-        std::string file_in_name = "../tests/sample_empty.txt";
+        std::string file_in_name = "../test/sample_empty.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
         CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
@@ -55,7 +55,7 @@ namespace tests {
     }
 
     TEST_CASE("one letter") {
-        std::string file_in_name = "../tests/sample_one.txt";
+        std::string file_in_name = "../test/sample_one.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
         CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
