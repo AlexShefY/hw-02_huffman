@@ -65,4 +65,25 @@ namespace tests {
                 std::equal(std::istreambuf_iterator<char>(file_in), std::istreambuf_iterator<char>(), std::istreambuf_iterator<char>(file_out_in)),
                 true);
     }
+
+    TEST_CASE("test tree") {
+        std::map<char, int> mp_counter;
+        for (int i = 0; i < 26; i++) {
+            mp_counter['a' + i] = random() + 1;
+        }
+        Trees::Tree tree(mp_counter);
+        std::map<char, std::vector<bool>> mp_bytes;
+        tree.get_map(mp_bytes);
+        for (int i = 0; i < 26; i++) {
+            char symbol = 'a' + i;
+            char ans = -1;
+            bool flag = false;
+            for (auto byte : mp_bytes[symbol]) {
+                CHECK_EQ(ans, -1);
+                ans = tree.move(byte, flag);
+            }
+            CHECK_EQ(symbol, ans);
+            CHECK_EQ(flag, true);
+        }
+    }
 }
