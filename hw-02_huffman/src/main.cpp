@@ -12,19 +12,24 @@ int main(int argc, char* argv[]) {
         std::cout << ("wrong flag " + std::string(argv[1]));
         exit(1);
     }
-    if (argv[2] != std::string_view("-f")) {
-        std::cout << ("wrong flag " + std::string(argv[2]));
-        exit(1);
+    std::string file_in_name, file_out_name;
+    if (argv[2] == std::string_view("-f") && argv[4] == std::string_view("-o")) {
+        file_in_name = argv[3];
+        file_out_name = argv[5];
     }
-    if (argv[4] != std::string_view("-o")) {
-        std::cout << ("wrong flag " + std::string(argv[4]));
+    else if (argv[2] == std::string_view("-o") && argv[4] == std::string_view("-f")) {
+        file_in_name = argv[5];
+        file_out_name = argv[3];
+    }
+    else {
+        std::cout << ("wrong flags " + std::string(argv[2]) + " " + std::string(argv[4]));
         exit(1);
     }
     try {
         if (argv[1] == std::string_view("-c")) {
-            encode(argv[3], argv[5], std::cout);
+            encode(file_in_name, file_out_name, std::cout);
         } else {
-            decode(argv[3], argv[5], std::cout);
+            decode(file_in_name, file_out_name, std::cout);
         }
     }
     catch (Exceptions::MyException &e) {
