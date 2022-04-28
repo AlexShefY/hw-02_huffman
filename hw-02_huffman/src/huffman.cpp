@@ -22,6 +22,7 @@ namespace HuffmanArchiver {
     }
 
     HuffmanArchiver::HuffmanArchiver() {
+        local_tree = nullptr;
     }
 
     void HuffmanArchiver::build(std::string file) {

@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
     try {
-        if (argv[1] != std::string_view("-c")) {
+        if (argv[1] == std::string_view("-c")) {
             encode(argv[3], argv[5]);
         } else {
             decode(argv[3], argv[5]);
