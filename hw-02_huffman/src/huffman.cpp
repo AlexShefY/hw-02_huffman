@@ -5,10 +5,10 @@
 #include "exceptions.hpp"
 #include <algorithm>
 
-namespace HuffmanArchiver {
+namespace huffman_compression {
 
     std::istream &operator>>(std::istream &stream, HuffmanArchiver &archiver) {
-        archiver.local_tree = new Trees::Tree();
+        archiver.local_tree = new Tree();
         stream >> *archiver.local_tree;
         archiver.tree_size = archiver.local_tree->byte_size;
         archiver.tree_size += sizeof(int);
@@ -28,8 +28,8 @@ namespace HuffmanArchiver {
 
     void HuffmanArchiver::build(std::string file) {
         std::ifstream stream(file);
-        std::map<char, int> stat_symbols = help_functions::map_from_text(stream, text_size);
-        local_tree = new Trees::Tree(stat_symbols);
+        std::map<char, int> stat_symbols = map_from_text(stream, text_size);
+        local_tree = new Tree(stat_symbols);
     }
 
     HuffmanArchiver::~HuffmanArchiver() {
@@ -76,6 +76,24 @@ namespace HuffmanArchiver {
         if (out.fail()) {
             throw Exceptions::MyException("Failed to write size");
         }
+    }
+
+    std::map<char, int> HuffmanArchiver::map_from_text(std::istream &stream, int &size) {
+        std::map<char, int> mp;
+        char t;
+        stream.read(&t, sizeof(char));
+        if (stream.fail() && !stream.eof()) {
+            throw Exceptions::MyException("Failed to read text");
+        }
+        while (!stream.eof()) {
+            mp[t]++;
+            size++;
+            stream.read(&t, sizeof(char));
+            if (stream.fail() && !stream.eof()) {
+                throw Exceptions::MyException("Failed to read text");
+            }
+        }
+        return mp;
     }
 
     void HuffmanArchiver::encode(std::string file_in, std::ostream& out) {

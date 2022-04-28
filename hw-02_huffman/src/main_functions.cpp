@@ -1,7 +1,7 @@
 #include "main_functions.hpp"
 
 void encode(std::string file_in_name, std::string file_out_name, std::ostream& stream) {
-    HuffmanArchiver::HuffmanArchiver archiver;
+    huffman_compression::HuffmanArchiver archiver;
     archiver.build(file_in_name);
     std::ofstream file_out(file_out_name);
     if (!file_out) {
@@ -23,7 +23,7 @@ void decode(std::string file_in_name, std::string file_out_name,  std::ostream& 
         std::cout << "No such file " << file_in_name;
         exit(1);
     }
-    HuffmanArchiver::HuffmanArchiver archiver;
+    huffman_compression::HuffmanArchiver archiver;
     file_in >> archiver;
     archiver.decode(file_in, file_out_name);
     stream << archiver.bytes_size << "\n";

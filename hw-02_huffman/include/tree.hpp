@@ -3,22 +3,23 @@
 #include <queue>
 #include <map>
 
-namespace Trees {
-    class Node {
-    public:
-        Node* right = nullptr;
-        Node* left = nullptr;
-        char symbol;
-        int count;
-
-        Node(char symbol, int count);
-        ~Node();
-
-        void add_nodes(char c, const std::vector<bool>& vec, size_t i);
-        void get_map(std::map<char, std::vector <bool>>& mp, std::vector <bool>& vec) const;
-    };
-
+namespace huffman_compression {
     class Tree {
+        class Node {
+        public:
+            Node* right = nullptr;
+            Node* left = nullptr;
+            char symbol;
+            int count;
+
+            Node(char symbol, int count);
+            ~Node();
+
+            void add_nodes(char c, const std::vector<bool>& vec, size_t i);
+            void get_map(std::map<char, std::vector <bool>>& mp, std::vector <bool>& vec) const;
+        };
+
+
         Node* root = nullptr;
         Node* cur = nullptr;
 

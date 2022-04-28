@@ -4,12 +4,14 @@
 #include <map>
 #include "tree.hpp"
 
-namespace HuffmanArchiver {
+namespace huffman_compression {
     class HuffmanArchiver {
 
-        Trees::Tree* local_tree;
+        Tree* local_tree;
 
         void process_byte(bool byte, std::ostream &stream);
+
+        std::map<char, int> map_from_text(std::istream &stream, int &size);
 
     public:
         int tree_size = 0;

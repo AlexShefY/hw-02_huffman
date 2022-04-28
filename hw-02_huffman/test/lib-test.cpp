@@ -68,7 +68,7 @@ namespace tests {
         CHECK(file_equality(file_in_name, file_out_name));
     }
 
-    void test_tree(Trees::Tree &tree) {
+    void test_tree(huffman_compression::Tree &tree) {
         std::map<char, std::vector<bool>> mp_bytes;
         tree.get_map(mp_bytes);
         for (int i = 0; i < 26; i++) {
@@ -89,7 +89,7 @@ namespace tests {
         for (int i = 0; i < 26; i++) {
             mp_counter['a' + i] = (1 << i);
         }
-        Trees::Tree tree(mp_counter);
+        huffman_compression::Tree tree(mp_counter);
         test_tree(tree);
     }
 
@@ -98,7 +98,7 @@ namespace tests {
         for (int i = 0; i < 26; i++) {
             mp_counter['a' + i] = 1;
         }
-        Trees::Tree tree(mp_counter);
+        huffman_compression::Tree tree(mp_counter);
         test_tree(tree);
     }
 
@@ -107,8 +107,8 @@ namespace tests {
         for (int i = 0; i < 26; i++) {
             mp_counter['a' + i] = 1;
         }
-        Trees::Tree tree(mp_counter);
-        Trees::Tree tree_build;
+        huffman_compression::Tree tree(mp_counter);
+        huffman_compression::Tree tree_build;
         std::map<char, std::vector<bool> > codes;
         tree.get_map(codes);
         tree_build.build(codes);
@@ -120,14 +120,14 @@ namespace tests {
         for (int i = 0; i < 26; i++) {
             mp_counter['a' + i] = i + 1;
         }
-        Trees::Tree tree(mp_counter);
+        huffman_compression::Tree tree(mp_counter);
         std::map<char, std::vector<bool> > map_bytes;
         tree.get_map(map_bytes);
         std::ofstream file_out("out");
         file_out << tree;
         file_out.close();
         std::ifstream file_in("out");
-        Trees::Tree tree_new;
+        huffman_compression::Tree tree_new;
         file_in >> tree_new;
         file_in.close();
         std::map<char, std::vector<bool> > map_bytes_new;

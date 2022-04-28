@@ -2,7 +2,7 @@
 #include "help_functions.hpp"
 #include <algorithm>
 
-namespace help_functions {
+namespace io_helpers {
     std::vector<bool> read_bytes(std::istream &stream, size_t &calc_size) {
         int size;
         stream.read(reinterpret_cast<char *>(&size), sizeof(size));
@@ -55,24 +55,5 @@ namespace help_functions {
             }
             calc_size += sizeof(a);
         }
-    }
-
-
-    std::map<char, int> map_from_text(std::istream &stream, int &size) {
-        std::map<char, int> mp;
-        char t;
-        stream.read(&t, sizeof(char));
-        if (stream.fail() && !stream.eof()) {
-            throw Exceptions::MyException("Failed to read text");
-        }
-        while (!stream.eof()) {
-            mp[t]++;
-            size++;
-            stream.read(&t, sizeof(char));
-            if (stream.fail() && !stream.eof()) {
-                throw Exceptions::MyException("Failed to read text");
-            }
-        }
-        return mp;
     }
 }

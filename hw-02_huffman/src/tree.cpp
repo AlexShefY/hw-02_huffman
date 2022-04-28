@@ -2,15 +2,15 @@
 #include "help_functions.hpp"
 #include "exceptions.hpp"
 
-namespace Trees {
+namespace huffman_compression {
 
-    Node::Node(char symbol, int count) : symbol(symbol), count(count) {
+    Tree::Node::Node(char symbol, int count) : symbol(symbol), count(count) {
     }
 
     Tree::Tree() {
     }
 
-    Node::~Node() {
+    Tree::Node::~Node() {
         delete left;
         delete right;
     }
@@ -40,9 +40,9 @@ namespace Trees {
         if (mp.size() == 0) {
             return;
         }
-        std::priority_queue<std::pair<int, Trees::Node*>> counter;
+        std::priority_queue<std::pair<int, Node*>> counter;
         for (auto p: mp) {
-            auto *node = new Trees::Node(p.first, p.second);
+            auto *node = new Node(p.first, p.second);
             counter.push({-node->count, node});
         }
         if (counter.size() == 1) {
@@ -69,7 +69,7 @@ namespace Trees {
         cur = root;
     }
 
-    void Node::get_map(std::map<char, std::vector<bool>> &mp, std::vector<bool> &vec) const {
+    void Tree::Node::get_map(std::map<char, std::vector<bool>> &mp, std::vector<bool> &vec) const {
         if (left == nullptr && right == nullptr) {
             mp[symbol] = vec;
         }
@@ -93,7 +93,7 @@ namespace Trees {
         root->get_map(mp, vec);
     }
 
-    void Node::add_nodes(char c, const std::vector<bool> &vec, size_t i) {
+    void Tree::Node::add_nodes(char c, const std::vector<bool> &vec, size_t i) {
         if (i == vec.size()) {
             symbol = c;
             return;
@@ -128,7 +128,7 @@ namespace Trees {
             }
             tree.byte_size += sizeof(item.first);
             tree.byte_size += sizeof(int);
-            help_functions::write_bytes(stream, item.second, tree.byte_size);
+            io_helpers::write_bytes(stream, item.second, tree.byte_size);
         }
         return stream;
     }
@@ -160,7 +160,7 @@ namespace Trees {
             }
             tree.byte_size += sizeof(c);
             tree.byte_size += sizeof(int);
-            mp[c] = help_functions::read_bytes(stream, tree.byte_size);
+            mp[c] = io_helpers::read_bytes(stream, tree.byte_size);
         }
         tree.build(mp);
         return stream;
