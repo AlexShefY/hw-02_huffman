@@ -22,6 +22,10 @@ namespace huffman_compression {
 
         HuffmanArchiver();
 
+        HuffmanArchiver(const HuffmanArchiver& other);
+
+        HuffmanArchiver& operator=(HuffmanArchiver other);
+
         ~HuffmanArchiver();
 
         void write_size(std::string file_in, std::ostream& out);

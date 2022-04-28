@@ -1,7 +1,6 @@
 #include <fstream>
 #include "huffman.hpp"
 #include "tree.hpp"
-#include "help_functions.hpp"
 #include "exceptions.hpp"
 #include <algorithm>
 
@@ -165,5 +164,20 @@ namespace huffman_compression {
                 i++;
             }
         }
+    }
+
+    HuffmanArchiver::HuffmanArchiver(const HuffmanArchiver &other) {
+        local_tree = other.local_tree;
+        bytes_size = other.bytes_size;
+        text_size = other.text_size;
+        tree_size = other.tree_size;
+    }
+
+    HuffmanArchiver &HuffmanArchiver::operator=(HuffmanArchiver other) {
+        local_tree = std::exchange(other.local_tree, nullptr);
+        bytes_size = std::exchange(other.bytes_size, 0);
+        tree_size = std::exchange(other.tree_size, 0);
+        text_size = std::exchange(other.text_size, 0);
+        return *this;
     }
 }
