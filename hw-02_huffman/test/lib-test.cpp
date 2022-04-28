@@ -5,17 +5,35 @@
 
 namespace tests {
 
-    void process_file(std::string file_in_name, std::string binary_name, std::string file_out_name) {
-        encode(file_in_name, binary_name);
-        decode(binary_name, file_out_name);
-    }
-
     bool file_equality(std::string file_in_name, std::string file_out_name) {
         std::ifstream file_in(file_in_name);
         std::ifstream file_out_in(file_out_name);
         return std::equal(std::istreambuf_iterator<char>(file_in),
-                std::istreambuf_iterator<char>(),
-                std::istreambuf_iterator<char>(file_out_in));
+                          std::istreambuf_iterator<char>(),
+                          std::istreambuf_iterator<char>(file_out_in));
+    }
+
+    void check_statistics() {
+        std::ifstream stream_in1("statistics1");
+        std::ifstream stream_in2("statistics2");
+        int text1, bytes1, tree1;
+        stream_in1 >> text1 >> bytes1 >> tree1;
+        int text2, bytes2, tree2;
+        stream_in2 >> bytes2 >> text2 >> tree2;
+        CHECK_EQ(text1, text2);
+        CHECK_EQ(bytes1, bytes2);
+        CHECK_EQ(tree1, tree2);
+        CHECK(bytes1 <= text1);
+    }
+
+    void process_file(std::string file_in_name, std::string binary_name, std::string file_out_name) {
+        std::ofstream stream1("statistics1");
+        std::ofstream stream2("statistics2");
+        encode(file_in_name, binary_name, stream1);
+        decode(binary_name, file_out_name, stream2);
+        stream1.close();
+        stream2.close();
+        check_statistics();
     }
 
     TEST_CASE("small file") {
