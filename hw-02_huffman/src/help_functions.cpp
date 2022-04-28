@@ -1,5 +1,6 @@
 #include "exceptions.hpp"
 #include "help_functions.hpp"
+#include <algorithm>
 
 namespace help_functions {
     std::vector<bool> read_bytes(std::istream &stream, size_t &calc_size) {

@@ -3,6 +3,7 @@
 #include "tree.hpp"
 #include "help_functions.hpp"
 #include "exceptions.hpp"
+#include <algorithm>
 
 namespace HuffmanArchiver {
 

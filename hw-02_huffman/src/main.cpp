@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
     }
     catch (Exceptions::MyException &e) {
         std::cout << e.what();
+        exit(1);
     }
     return 0;
 }
