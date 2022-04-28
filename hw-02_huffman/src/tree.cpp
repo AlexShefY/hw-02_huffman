@@ -1,6 +1,5 @@
 #include "tree.hpp"
 #include "help_functions.hpp"
-#include "statistics.hpp"
 #include "exceptions.hpp"
 
 namespace Trees {
@@ -41,24 +40,32 @@ namespace Trees {
         if (mp.size() == 0) {
             return;
         }
-        Statistics::Statistics stat = Statistics::Statistics(mp);
-        if (stat.one_elem()) {
-            Node* node1 = stat.extract();
+        std::priority_queue<std::pair<int, Trees::Node*>> counter;
+        for (auto p: mp) {
+            auto *node = new Trees::Node(p.first, p.second);
+            counter.push({-node->count, node});
+        }
+        if (counter.size() == 1) {
+            Node* node1 = counter.top().second;
+            counter.pop();
             Node* node0 = new Node(-1, node1->count);
             node0->left = node1;
             root = node0;
             cur = root;
             return;
         }
-        while (!stat.one_elem()) {
-            Node *node1 = stat.extract();
-            Node *node2 = stat.extract();
+        while (counter.size() != 1) {
+            Node *node1 = counter.top().second;
+            counter.pop();
+            Node *node2 = counter.top().second;
+            counter.pop();
             Node *node0 = new Node(-1, node1->count + node2->count);
             node0->left = node1;
             node0->right = node2;
-            stat.add(node0);
+            counter.push({-node0->count, node0});
         }
-        root = stat.extract();
+        root = counter.top().second;
+        counter.pop();
         cur = root;
     }
 

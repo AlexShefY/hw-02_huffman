@@ -1,7 +1,8 @@
 #include "main_functions.hpp"
 
 void encode(std::string file_in_name, std::string file_out_name) {
-    HuffmanArchiver::HuffmanArchiver archiver(file_in_name);
+    HuffmanArchiver::HuffmanArchiver archiver;
+    archiver.build(file_in_name);
     std::ofstream file_out(file_out_name);
     if (!file_out) {
         std::cout << "No such file " << file_out_name;

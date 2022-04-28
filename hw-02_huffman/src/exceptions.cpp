@@ -1,4 +1,9 @@
 #include "exceptions.hpp"
 
-Exceptions::MyException::MyException(std::string message) : message(message) {
+Exceptions::MyException::MyException(const char* message) : message(message) {
+}
+
+
+const char* Exceptions::MyException::what() const noexcept {
+    return message;
 }

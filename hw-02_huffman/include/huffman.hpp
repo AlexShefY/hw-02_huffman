@@ -16,7 +16,7 @@ namespace HuffmanArchiver {
         int text_size = 0;
         int bytes_size = 0;
 
-        HuffmanArchiver(std::string file);
+        void build(std::string file);
 
         HuffmanArchiver();
 

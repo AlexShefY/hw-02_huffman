@@ -24,7 +24,7 @@ namespace HuffmanArchiver {
     HuffmanArchiver::HuffmanArchiver() {
     }
 
-    HuffmanArchiver::HuffmanArchiver(std::string file) {
+    void HuffmanArchiver::build(std::string file) {
         std::ifstream stream(file);
         std::map<char, int> stat_symbols = help_functions::map_from_text(stream, text_size);
         local_tree = new Trees::Tree(stat_symbols);
@@ -53,7 +53,7 @@ namespace HuffmanArchiver {
     void HuffmanArchiver::write_size(std::string file_in, std::ostream& out) {
         std::ifstream in(file_in);
         if (!in) {
-            throw Exceptions::MyException("No such file " + file_in);
+            throw Exceptions::MyException(("No such file " + file_in).c_str());
         }
         char t;
         in.read(&t, sizeof(char));
@@ -79,7 +79,7 @@ namespace HuffmanArchiver {
     void HuffmanArchiver::encode(std::string file_in, std::ostream& out) {
         std::ifstream in(file_in);
         if (!in) {
-            throw Exceptions::MyException("No such file " + file_in);
+            throw Exceptions::MyException(("No such file " + file_in).c_str());
         }
         char t;
         in.read(&t, sizeof(char));
@@ -107,7 +107,7 @@ namespace HuffmanArchiver {
     void HuffmanArchiver::decode(std::istream& in, std::string file_out) {
         std::ofstream out(file_out);
         if (!out) {
-            throw Exceptions::MyException("No such file " + file_out);
+            throw Exceptions::MyException(("No such file " + file_out).c_str());
         }
         int size;
         in.read(reinterpret_cast<char *>(&size), sizeof(size));

@@ -3,8 +3,9 @@
 
 namespace Exceptions {
     class MyException : std::exception {
+        const char* message;
     public:
-        std::string message;
-        MyException(std::string message);
+        explicit MyException(const char* message);
+        const char* what() const noexcept override;
     };
 }

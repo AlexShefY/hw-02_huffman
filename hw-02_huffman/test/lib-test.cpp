@@ -6,23 +6,16 @@
 
 namespace tests {
 
-    int process_file(std::string file_in_name, std::string binary_name, std::string file_out_name) {
-        try {
-            encode(file_in_name, binary_name);
-            decode(binary_name, file_out_name);
-        }
-        catch (Exceptions::MyException &e) {
-            std::cout << e.message;
-            return 1;
-        }
-        return 0;
+    void process_file(std::string file_in_name, std::string binary_name, std::string file_out_name) {
+        encode(file_in_name, binary_name);
+        decode(binary_name, file_out_name);
     }
 
     TEST_CASE("small file") {
         std::string file_in_name = "../test/sample_text.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
-        CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
+        process_file(file_in_name, binary_name, file_out_name);
         std::ifstream file_in(file_in_name);
         std::ifstream file_out_in(file_out_name);
         CHECK_EQ(
@@ -34,7 +27,7 @@ namespace tests {
         std::string file_in_name = "../test/sample_big.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
-        CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
+        process_file(file_in_name, binary_name, file_out_name);
         std::ifstream file_in(file_in_name);
         std::ifstream file_out_in(file_out_name);
         CHECK_EQ(
@@ -46,7 +39,7 @@ namespace tests {
         std::string file_in_name = "../test/sample_empty.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
-        CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
+        process_file(file_in_name, binary_name, file_out_name);
         std::ifstream file_in(file_in_name);
         std::ifstream file_out_in(file_out_name);
         CHECK_EQ(
@@ -58,7 +51,7 @@ namespace tests {
         std::string file_in_name = "../test/sample_one.txt";
         std::string binary_name = "output";
         std::string file_out_name = "my_txt.txt";
-        CHECK_EQ(process_file(file_in_name, binary_name, file_out_name), 0);
+        process_file(file_in_name, binary_name, file_out_name);
         std::ifstream file_in(file_in_name);
         std::ifstream file_out_in(file_out_name);
         CHECK_EQ(

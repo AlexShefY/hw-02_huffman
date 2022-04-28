@@ -8,27 +8,27 @@ int main(int argc, char* argv[]) {
         std::cout << "Wrong number of arguments";
         exit(1);
     }
-    if (strcmp(argv[1], "-c") != 0 && strcmp(argv[1], "-u") != 0) {
+    if (argv[1] != std::string_view("-c") && argv[1] != std::string_view("-u")) {
         std::cout << ("wrong flag " + std::string(argv[1]));
         exit(1);
     }
-    if (strcmp(argv[2], "-f") != 0) {
+    if (argv[2] != std::string_view("-f")) {
         std::cout << ("wrong flag " + std::string(argv[2]));
         exit(1);
     }
-    if (strcmp(argv[4], "-o") != 0) {
+    if (argv[4] != std::string_view("-o")) {
         std::cout << ("wrong flag " + std::string(argv[4]));
         exit(1);
     }
     try {
-        if (strcmp(argv[1], "-c") == 0) {
+        if (argv[1] != std::string_view("-c")) {
             encode(argv[3], argv[5]);
         } else {
             decode(argv[3], argv[5]);
         }
     }
     catch (Exceptions::MyException &e) {
-        std::cout << e.message;
+        std::cout << e.what();
     }
     return 0;
 }
