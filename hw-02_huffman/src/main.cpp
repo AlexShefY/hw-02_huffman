@@ -22,9 +22,9 @@ int main(int argc, char* argv[]) {
     }
     try {
         if (argv[1] == std::string_view("-c")) {
-            encode(argv[3], argv[5]);
+            encode(argv[3], argv[5], std::cout);
         } else {
-            decode(argv[3], argv[5]);
+            decode(argv[3], argv[5], std::cout);
         }
     }
     catch (Exceptions::MyException &e) {
