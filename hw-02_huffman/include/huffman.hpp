@@ -30,9 +30,9 @@ namespace huffman_compression {
 
         void write_size(std::string file_in, std::ostream& out);
 
-        friend std::istream& operator>>(std::istream &stream, HuffmanArchiver &archiver);
+        void write_tree(std::ostream& out);
 
-        friend std::ostream& operator<<(std::ostream &stream, HuffmanArchiver &archiver);
+        void read_tree(std::istream& in);
 
         void encode(std::string file_in, std::ostream& out);
 

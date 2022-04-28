@@ -6,19 +6,17 @@
 
 namespace huffman_compression {
 
-    std::istream &operator>>(std::istream &stream, HuffmanArchiver &archiver) {
-        archiver.local_tree = new Tree();
-        stream >> *archiver.local_tree;
-        archiver.tree_size = archiver.local_tree->byte_size;
-        archiver.tree_size += sizeof(int);
-        return stream;
+    void HuffmanArchiver::read_tree(std::istream &stream) {
+        local_tree = new Tree();
+        stream >> *local_tree;
+        tree_size = local_tree->byte_size;
+        tree_size += sizeof(int);
     }
 
-    std::ostream &operator<<(std::ostream &stream, HuffmanArchiver &archiver) {
-        stream << *archiver.local_tree;
-        archiver.tree_size = archiver.local_tree->byte_size;
-        archiver.tree_size += sizeof(int);
-        return stream;
+    void HuffmanArchiver::write_tree(std::ostream &stream) {
+        stream << *local_tree;
+        tree_size = local_tree->byte_size;
+        tree_size += sizeof(int);
     }
 
     HuffmanArchiver::HuffmanArchiver() {
