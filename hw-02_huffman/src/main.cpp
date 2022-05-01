@@ -27,9 +27,9 @@ int main(int argc, char* argv[]) {
     }
     try {
         if (argv[1] == std::string_view("-c")) {
-            encode(file_in_name, file_out_name, std::cout);
+            main_functions::encode(file_in_name, file_out_name, std::cout);
         } else {
-            decode(file_in_name, file_out_name, std::cout);
+            main_functions::decode(file_in_name, file_out_name, std::cout);
         }
     }
     catch (Exceptions::MyException &e) {

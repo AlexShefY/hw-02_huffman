@@ -6,35 +6,11 @@
 
 namespace huffman_compression {
 
-    void HuffmanArchiver::read_tree(std::istream &stream) {
-        local_tree = new Tree();
-        stream >> *local_tree;
-        tree_size = local_tree->byte_size;
-        tree_size += sizeof(int);
+    Statistics::Statistics() : tree_size(0), text_size(0), bytes_size(0) {
     }
 
-    void HuffmanArchiver::write_tree(std::ostream &stream) {
-        stream << *local_tree;
-        tree_size = local_tree->byte_size;
-        tree_size += sizeof(int);
-    }
-
-    HuffmanArchiver::HuffmanArchiver() {
-        local_tree = nullptr;
-    }
-
-    void HuffmanArchiver::build(std::string file) {
-        std::ifstream stream(file);
-        std::map<char, int> stat_symbols = map_from_text(stream, text_size);
-        local_tree = new Tree(stat_symbols);
-    }
-
-    HuffmanArchiver::~HuffmanArchiver() {
-        delete local_tree;
-    }
-
-    void HuffmanArchiver::process_byte(bool byte, std::ostream &stream) {
-        bytes_size++;
+    void process_byte(bool byte, std::ostream &stream, Statistics& statistics) {
+        statistics.bytes_size++;
         static int8_t int_bytes = 0;
         static size_t count_bytes = 0;
         count_bytes++;
@@ -49,7 +25,7 @@ namespace huffman_compression {
         }
     }
 
-    void HuffmanArchiver::write_size(std::string file_in, std::ostream& out) {
+    int get_size(std::string file_in, const Tree& tree) {
         std::ifstream in(file_in);
         if (!in) {
             throw Exceptions::MyException(("No such file " + file_in).c_str());
@@ -60,22 +36,19 @@ namespace huffman_compression {
             throw Exceptions::MyException("Failed to read text");
         }
         std::map<char, std::vector<bool>> mp;
-        local_tree->get_map(mp);
-        int size = 0;
+        tree.get_map(mp);
+        int bites_size = 0;
         while (!in.eof()) {
-            size += mp[t].size();
+            bites_size += mp[t].size();
             in.read(&t, sizeof(char));
             if (in.fail() && !in.eof()) {
                 throw Exceptions::MyException("Failed to read text");
             }
         }
-        out.write(reinterpret_cast<const char *>(&size), sizeof(size));
-        if (out.fail()) {
-            throw Exceptions::MyException("Failed to write size");
-        }
+        return bites_size;
     }
 
-    std::map<char, int> HuffmanArchiver::map_from_text(std::istream &stream, int &size) {
+    std::map<char, int> map_from_text(std::istream &stream, Statistics &statistics) {
         std::map<char, int> mp;
         char t;
         stream.read(&t, sizeof(char));
@@ -84,7 +57,7 @@ namespace huffman_compression {
         }
         while (!stream.eof()) {
             mp[t]++;
-            size++;
+            statistics.text_size++;
             stream.read(&t, sizeof(char));
             if (stream.fail() && !stream.eof()) {
                 throw Exceptions::MyException("Failed to read text");
@@ -93,7 +66,7 @@ namespace huffman_compression {
         return mp;
     }
 
-    void HuffmanArchiver::encode(std::string file_in, std::ostream& out) {
+    void encode(std::string file_in, std::ostream& out, const Tree& tree, Statistics& statistics) {
         std::ifstream in(file_in);
         if (!in) {
             throw Exceptions::MyException(("No such file " + file_in).c_str());
@@ -104,24 +77,24 @@ namespace huffman_compression {
             throw Exceptions::MyException("Failed to read text");
         }
         std::map<char, std::vector<bool>> mp;
-        local_tree->get_map(mp);
+        tree.get_map(mp);
         while (!in.eof()) {
             for (auto byte : mp[t]) {
-                process_byte(byte, out);
+                process_byte(byte, out, statistics);
             }
             in.read(&t, sizeof(char));
             if (in.fail() && !in.eof()) {
                 throw Exceptions::MyException("Failed to read text");
             }
         }
-        size_t remainder = (8 - bytes_size % 8) % 8;
+        size_t remainder = (8 - statistics.bytes_size % 8) % 8;
         while (remainder--) {
-            process_byte(false, out);
+            process_byte(false, out, statistics);
         }
-        bytes_size /= 8;
+        statistics.bytes_size /= 8;
     }
 
-    void HuffmanArchiver::decode(std::istream& in, std::string file_out) {
+    void decode(std::istream &in, std::string file_out, Tree& tree, Statistics& statistics) {
         std::ofstream out(file_out);
         if (!out) {
             throw Exceptions::MyException(("No such file " + file_out).c_str());
@@ -139,7 +112,7 @@ namespace huffman_compression {
             if (in.fail()) {
                 throw Exceptions::MyException("Failed to read bytes");
             }
-            bytes_size += sizeof(byte);
+            statistics.bytes_size += sizeof(byte);
             std::vector <int> vec(8);
             int val = static_cast<int>(byte);
             for (size_t i = 0; i < 8; i++) {
@@ -150,9 +123,9 @@ namespace huffman_compression {
             size_t i = 0;
             while (size > 0 && i < vec.size()) {
                 bool flag = false;
-                char cur = local_tree->move(vec[i], flag);
+                char cur = tree.move(vec[i], flag);
                 if (flag) {
-                    text_size++;
+                    statistics.text_size++;
                     out.write(reinterpret_cast<char*>(&cur), sizeof(cur));
                     if (out.fail()) {
                         throw Exceptions::MyException("Failed to write text");
@@ -164,18 +137,4 @@ namespace huffman_compression {
         }
     }
 
-    HuffmanArchiver::HuffmanArchiver(const HuffmanArchiver &other) {
-        local_tree = other.local_tree;
-        bytes_size = other.bytes_size;
-        text_size = other.text_size;
-        tree_size = other.tree_size;
-    }
-
-    HuffmanArchiver &HuffmanArchiver::operator=(HuffmanArchiver other) {
-        local_tree = std::exchange(other.local_tree, nullptr);
-        bytes_size = std::exchange(other.bytes_size, 0);
-        tree_size = std::exchange(other.tree_size, 0);
-        text_size = std::exchange(other.text_size, 0);
-        return *this;
-    }
 }

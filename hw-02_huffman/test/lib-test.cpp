@@ -29,8 +29,8 @@ namespace tests {
     void process_file(std::string file_in_name, std::string binary_name, std::string file_out_name) {
         std::ofstream stream1("statistics1");
         std::ofstream stream2("statistics2");
-        encode(file_in_name, binary_name, stream1);
-        decode(binary_name, file_out_name, stream2);
+        main_functions::encode(file_in_name, binary_name, stream1);
+        main_functions::decode(binary_name, file_out_name, stream2);
         stream1.close();
         stream2.close();
         check_statistics();
