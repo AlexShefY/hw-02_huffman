@@ -1,3 +1,0 @@
-#include "Rectangle.hpp"
-
-// TODO

@@ -1,3 +1,0 @@
-#include "Figure.hpp"
-
-// TODO
